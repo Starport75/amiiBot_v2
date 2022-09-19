@@ -1,0 +1,16 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.github.Starport75</groupId>
+  <artifactId>amiiBot_v2</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>amiiBot v2</name>
+  <description>The second version of amiiBot - featured on the r/amiibo Discord server</description>
+   <dependencies>
+        <dependency>
+            <groupId>org.javacord</groupId>
+            <artifactId>javacord</artifactId>
+            <version>3.5.0</version>
+            <type>pom</type>
+        </dependency>
+    </dependencies>
+</project>
