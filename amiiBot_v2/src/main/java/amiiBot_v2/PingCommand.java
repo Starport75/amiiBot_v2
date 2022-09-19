@@ -13,7 +13,7 @@ public class PingCommand {
 
 	// Spot to set the name and description of the command
 	String commandName = "ping";
-	String commandDescription = "Gives the bot a ping!";
+	String commandDescription = "Gives the bot a ping!!";
 
 	public PingCommand(DiscordApi api) {
 		List<SlashCommand> globalCommands = api.getGlobalSlashCommands().join();
