@@ -4,9 +4,14 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 
 public class Main {
+	
+	static boolean debugMode = true;
+	
 	public static void main(String[] args) {
 		// Insert your bot's token here
-		String token = "your token";
+		
+		FileAccess file = new FileAccess(debugMode);
+		String token = file.getDiscordToken();
 
 		DiscordApi api = new DiscordApiBuilder().setToken(token).login().join();
 
