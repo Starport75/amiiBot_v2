@@ -8,14 +8,14 @@ import org.javacord.api.interaction.SlashCommand;
 import org.javacord.api.interaction.SlashCommandInteraction;
 import org.javacord.api.interaction.SlashCommandUpdater;
 
-public class PingCommand {
+public class CommandPing {
 	SlashCommand thisCommand;
 
 	// Spot to set the name and description of the command
 	String commandName = "ping";
 	String commandDescription = "Gives the bot a ping!!";
 
-	public PingCommand(DiscordApi api) {
+	public CommandPing(DiscordApi api) {
 		List<SlashCommand> globalCommands = api.getGlobalSlashCommands().join();
 
 		int i = 0;
