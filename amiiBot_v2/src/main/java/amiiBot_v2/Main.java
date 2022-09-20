@@ -9,11 +9,12 @@ public class Main {
 	
 	public static void main(String[] args) {		
 		FileAccess file = new FileAccess(debugMode);
+		AmiiboHuntAccess access = new AmiiboHuntAccess(file.getAmiiboHuntToken());
 		String token = file.getDiscordToken();
 		DiscordApi api = new DiscordApiBuilder().setToken(token).login().join();
 
 		System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
 		
-		new CommandPing(api);
+		new CommandPing(api, access);
 		}
 }
