@@ -15,7 +15,7 @@ public class CommandPing {
 	String commandName = "ping";
 	String commandDescription = "Gives the bot a ping!!";
 
-	public CommandPing(DiscordApi api) {
+	public CommandPing(DiscordApi api, AmiiboHuntAccess amiiboData) {
 		List<SlashCommand> globalCommands = api.getGlobalSlashCommands().join();
 
 		int i = 0;
