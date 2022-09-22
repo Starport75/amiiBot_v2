@@ -15,30 +15,25 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
 
 public class AmiiboHuntAccess {
-
-	private static final String USER_AGENT = "Mozilla/5.0";
-
-	private static final String GET_URL = "https://localhost:9090/SpringMVCExample";
-
-	private static final String POST_URL = "https://localhost:9090/SpringMVCExample/home";
-
-	public static void main(String[] args) throws IOException {
-		sendGET();
+	
+	String token;
+		
+	public AmiiboHuntAccess(String nToken) throws IOException {
+		token = nToken;
+		
+		String getOut = sendGET("https://www.amiibohunt.com/api/discord/v1/getAmiiboData");
+		//System.out.println(getOut);
 		System.out.println("GET DONE");
-		sendPOST();
-		System.out.println("POST DONE");
+		JSONObject amiiboJSON = new JSONObject(getOut);
 	}
 
-	private static void sendGET() throws IOException {
+	private String sendGET(String getUrl) throws IOException {
 		CloseableHttpClient httpClient = HttpClients.createDefault();
-		HttpGet httpGet = new HttpGet(GET_URL);
-		httpGet.addHeader("User-Agent", USER_AGENT);
+		HttpGet httpGet = new HttpGet(getUrl + "?api_key=" + token);
 		CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
-
-		System.out.println("GET Response Status:: "
-				+ httpResponse.getStatusLine().getStatusCode());
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
 				httpResponse.getEntity().getContent()));
@@ -48,19 +43,21 @@ public class AmiiboHuntAccess {
 
 		while ((inputLine = reader.readLine()) != null) {
 			response.append(inputLine);
+			System.out.println(inputLine.toString());
 		}
 		reader.close();
 
 		// print result
-		System.out.println(response.toString());
+		String output = response.toString();
 		httpClient.close();
+		return output;
 	}
 
-	private static void sendPOST() throws IOException {
+	private void sendPOST(String postUrl) throws IOException {
 
 		CloseableHttpClient httpClient = HttpClients.createDefault();
-		HttpPost httpPost = new HttpPost(POST_URL);
-		httpPost.addHeader("User-Agent", USER_AGENT);
+		HttpPost httpPost = new HttpPost(postUrl);
+		httpPost.addHeader("api_key", token);
 
 		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 		urlParameters.add(new BasicNameValuePair("userName", "Pankaj Kumar"));
@@ -89,5 +86,4 @@ public class AmiiboHuntAccess {
 		httpClient.close();
 
 	}
-
 }

@@ -1,5 +1,7 @@
 package amiiBot_v2;
 
+import java.io.IOException;
+
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 
@@ -7,7 +9,7 @@ public class Main {
 	
 	static boolean debugMode = true;
 	
-	public static void main(String[] args) {		
+	public static void main(String[] args) throws IOException {		
 		FileAccess file = new FileAccess(debugMode);
 		AmiiboHuntAccess access = new AmiiboHuntAccess(file.getAmiiboHuntToken());
 		String token = file.getDiscordToken();
