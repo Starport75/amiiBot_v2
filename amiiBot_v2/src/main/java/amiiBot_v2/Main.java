@@ -18,5 +18,6 @@ public class Main {
 		System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
 		
 		new CommandPing(api, access);
+		new CommandShowInfo(api, access);
 		}
 }
