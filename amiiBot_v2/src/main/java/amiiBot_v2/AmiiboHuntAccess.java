@@ -19,7 +19,7 @@ import org.json.JSONObject;
 public class AmiiboHuntAccess {
 
 	String token;
-	JSONObject baseList = sendGET("https://www.amiibohunt.com/api/discord/v1/getAmiiboData", "205877471067766784")
+	JSONObject baseList = sendGET("https://www.amiibohunt.com/api/discord/v1/getAmiiboDataDebug", "205877471067766784")
 ;
 
 	public AmiiboHuntAccess(String nToken) throws IOException {
@@ -47,7 +47,7 @@ public class AmiiboHuntAccess {
 		InputStream instream = entity.getContent();
 		byte[] bytes = IOUtils.toByteArray(instream);
 		String result = new String(bytes, "UTF-8");
-
+		System.out.println(result);
 		return new JSONObject(result);
 	}
 }
