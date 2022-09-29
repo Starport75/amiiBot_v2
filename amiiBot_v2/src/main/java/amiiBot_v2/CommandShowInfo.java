@@ -1,5 +1,7 @@
 package amiiBot_v2;
 
+import java.awt.Color;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import org.javacord.api.DiscordApi;
@@ -45,22 +47,37 @@ public class CommandShowInfo {
 			if (slashCommandInteraction.getCommandName().equals(commandName)) {
 
 				// Spot for command response
-				JSONObject amiibo = amiiboData.getBaseList().get("");
-				EmbedBuilder embed = new EmbedBuilder().setTitle("Title").setImage(currAmiibo.getImage(egg, userDiscordID))
+				JSONObject amiibo = amiiboData.getAmiibo(1).getJSONObject("amiibo");
+				System.out.println("amiibo: " + amiibo);
+
+				EmbedBuilder embed = new EmbedBuilder().setTitle(amiibo.getString("name"))
+						.setImage(amiibo.getString("image_imgix_full_card"))
 						.addField("Release Dates:",
-								"🇯🇵: " + currAmiibo.getReleaseJP() + "\n🇺🇸: " + currAmiibo.getReleaseNA()
-										+ "\n🇪🇺: " + currAmiibo.getReleaseEU() + "\n🇦🇺: "
-										+ currAmiibo.getReleaseAU())
-						.addField("**Retailers with Stock**", retailOutput).setColor(currAmiibo.getColor())
-						.addField("\u200b", "**Average Current Listed Prices** *(est.)*")
+								"🇯🇵: " + amiibo.getString("release_jp") + "\n🇺🇸: " + amiibo.getString("release_na")
+										+ "\n🇪🇺: " + amiibo.getString("release_eu") + "\n🇦🇺: "
+										+ amiibo.getString("release_au"))
+						.addField("**Retailers with Stock**", "stock data here")
+						.setColor(new Color(Integer.parseInt(amiibo.getString("background_color").substring(1), 16)))
+						.addField("\u200b", "**Average Current Listed Prices** \n *prices are an estimate based on collected data*")
 						.addInlineField("Average Price NiB",
-								currAmiibo.getFormattedNewPriceListedNA() + "\n"
-										+ currAmiibo.getFormattedNewPriceListedUK())
-						.addInlineField("Average Price OoB", currAmiibo.getFormattedUsedPriceListedNA() + "\n"
-								+ currAmiibo.getFormattedUsedPriceListedUK());
+								formatPrices(amiibo.getDouble("average_listed_this_month_us_new"), 0) + "\n"
+										+ formatPrices(amiibo.getDouble("average_listed_this_month_uk_new"), 1))
+						.addInlineField("Average Price OoB",
+								formatPrices(amiibo.getDouble("average_listed_this_month_us_used"), 0) + "\n"
+										+ formatPrices(amiibo.getDouble("average_listed_this_month_uk_used"), 1));
+
 				slashCommandInteraction.createImmediateResponder().addEmbed(embed).respond();
 			}
 		});
-
 	}
+
+	private String formatPrices(double price, int country) {
+		String[] currency = { "$", "£" };
+		DecimalFormat twoPlaces = new DecimalFormat("0.00");
+		if (price == 0) {
+			return "*Lack of Data*";
+		}
+		return currency[country] + twoPlaces.format(price);
+	}
+
 }

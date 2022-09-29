@@ -19,13 +19,16 @@ import org.json.JSONObject;
 public class AmiiboHuntAccess {
 
 	String token;
-	JSONObject baseList = sendGET("https://www.amiibohunt.com/api/discord/v1/getAmiiboDataDebug", "205877471067766784")
+	JSONObject baseList;
 ;
 
 	public AmiiboHuntAccess(String nToken) throws IOException {
 		token = nToken;
-		System.out.println(nToken);
-		System.out.println(baseList.toString());
+		ArrayList<NameValuePair> parameters = new ArrayList<NameValuePair>();
+		baseList = sendGET("https://www.amiibohunt.com/api/discord/v1/getCollectionById", parameters);
+		
+		//Output the base list
+		//System.out.println(baseList.toString());
 		
 	}
 	
@@ -33,13 +36,26 @@ public class AmiiboHuntAccess {
 		return baseList;
 	}
 	
-	private JSONObject sendGET(String url, String discordID) throws IOException {
+	public JSONObject getAmiibo(int amiiboID) {
+		ArrayList<NameValuePair> parameters = new ArrayList<NameValuePair>();
+		parameters.add(new BasicNameValuePair("amiibo_id", "1"));
+		JSONObject amiibo = null;
+		try {
+			amiibo = sendGET("https://www.amiibohunt.com/api/discord/v1/getAmiiboData", parameters);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println("amiibo: " + amiibo);
+		return amiibo;
+	}
+	
+	private JSONObject sendGET(String url, List<NameValuePair> params) throws IOException {
 
 		CloseableHttpClient client = HttpClients.createDefault();
-		HttpPost httpPost = new HttpPost(url);
+		HttpPost httpPost = new HttpPost(url + "?api_key=" + token);
 
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("api_key", token));
+		params.add(new BasicNameValuePair("discord_id", "205877471067766784"));
 
 		httpPost.setEntity(new UrlEncodedFormEntity(params));
 		CloseableHttpResponse response = client.execute(httpPost);
@@ -47,7 +63,6 @@ public class AmiiboHuntAccess {
 		InputStream instream = entity.getContent();
 		byte[] bytes = IOUtils.toByteArray(instream);
 		String result = new String(bytes, "UTF-8");
-		System.out.println(result);
 		return new JSONObject(result);
 	}
 }
