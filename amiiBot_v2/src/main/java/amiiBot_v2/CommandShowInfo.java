@@ -18,14 +18,15 @@ public class CommandShowInfo {
 	String commandName = "show_info";
 	String commandDescription = "Returns information on the given amiibo!";
 
-	public CommandShowInfo(DiscordApi api, AmiiboHuntAccess amiiboData) {
+	public CommandShowInfo(DiscordApi api, AmiiboHuntAccess amiiboData, AmiiboAssistant AAssist) {
 		List<SlashCommand> globalCommands = api.getGlobalSlashCommands().join();
 
 		int i = 0;
 		boolean isInitalized = false;
 
 		while (i < globalCommands.size() & !isInitalized) {
-			System.out.println(globalCommands.get(i).getName());
+			//List commands
+			//System.out.println(globalCommands.get(i).getName());
 			if (globalCommands.get(i).getName().equals(commandName)) {
 				isInitalized = true;
 				thisCommand = globalCommands.get(i);
@@ -47,7 +48,10 @@ public class CommandShowInfo {
 			if (slashCommandInteraction.getCommandName().equals(commandName)) {
 
 				// Spot for command response
-				JSONObject amiibo = amiiboData.getAmiibo(1).getJSONObject("amiibo");
+				
+				int amiiboID = AAssist.findAmiiboID("Figure","Super Smash Bros.", "Luigi");
+				System.out.println("amiiboID: " + amiiboID);
+				JSONObject amiibo = amiiboData.getAmiibo(amiiboID + 1).getJSONObject("amiibo");
 				System.out.println("amiibo: " + amiibo);
 
 				EmbedBuilder embed = new EmbedBuilder().setTitle(amiibo.getString("name"))

@@ -12,12 +12,13 @@ public class Main {
 	public static void main(String[] args) throws IOException {		
 		FileAccess file = new FileAccess(debugMode);
 		AmiiboHuntAccess access = new AmiiboHuntAccess(file.getAmiiboHuntToken());
+		AmiiboAssistant assistant = new AmiiboAssistant(access.getBaseList());
 		String token = file.getDiscordToken();
+		
 		DiscordApi api = new DiscordApiBuilder().setToken(token).login().join();
-
 		System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
 		
 		new CommandPing(api, access);
-		new CommandShowInfo(api, access);
+		new CommandShowInfo(api, access, assistant);
 		}
 }

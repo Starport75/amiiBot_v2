@@ -38,7 +38,7 @@ public class AmiiboHuntAccess {
 	
 	public JSONObject getAmiibo(int amiiboID) {
 		ArrayList<NameValuePair> parameters = new ArrayList<NameValuePair>();
-		parameters.add(new BasicNameValuePair("amiibo_id", "1"));
+		parameters.add(new BasicNameValuePair("amiibo_id", "" + amiiboID));
 		JSONObject amiibo = null;
 		try {
 			amiibo = sendGET("https://www.amiibohunt.com/api/discord/v1/getAmiiboData", parameters);
