@@ -33,28 +33,57 @@ public class AmiiboAssistant {
 	}
 
 	public int findAmiiboID(String type, String series, String name) {
-		System.out.println("amiibo ID: " + tsmList.getJSONObject(type).getJSONObject(series).getInt(name));
-		return tsmList.getJSONObject(type).getJSONObject(series).getInt(name);
+		if (tsmList.keySet().contains(type) && tsmList.getJSONObject(type).keySet().contains(series)
+				&& tsmList.getJSONObject(type).getJSONObject(series).keySet().contains(name)) {
+			System.out.println("amiibo ID: " + tsmList.getJSONObject(type).getJSONObject(series).getInt(name));
+			return tsmList.getJSONObject(type).getJSONObject(series).getInt(name);
+		} else {
+			return -1;
+		}
 	}
 
-	public ArrayList<String> getTypeList() {
-		return new ArrayList<String>(tsmList.keySet());
+	public ArrayList<String> getTypeList(String filter) {
+		ArrayList<String> typeList = new ArrayList<String>();
+		ArrayList<String> keySet = new ArrayList<String>(tsmList.keySet());
+		for (int i = 0; i < tsmList.keySet().size(); i++) {
+			if (keySet.get(i).toLowerCase().contains(filter.toLowerCase())) {
+				typeList.add(keySet.get(i));
+			}
+			if (typeList.size() == 25) {
+				return typeList;
+			}
+		}
+		return typeList;
 	}
 
-	public ArrayList<String> getSeriesList(String type) {
-		System.out.println(tsmList.getJSONObject(type).keySet());
-		return new ArrayList<String>(tsmList.getJSONObject(type).keySet());
+	public ArrayList<String> getSeriesList(String type, String filter) {
+		ArrayList<String> seriesList = new ArrayList<String>();
+		if (tsmList.keySet().contains(type)) {
+			ArrayList<String> keySet = new ArrayList<String>(tsmList.getJSONObject(type).keySet());
+			for (int i = 0; i < tsmList.getJSONObject(type).keySet().size(); i++) {
+				if (keySet.get(i).toLowerCase().contains(filter.toLowerCase())) {
+					seriesList.add(keySet.get(i));
+				}
+				if (seriesList.size() == 25) {
+					return seriesList;
+				}
+			}
+		}
+		return seriesList;
 	}
 
 	public ArrayList<String> getNameList(String type, String series, String filter) {
 		ArrayList<String> nameList = new ArrayList<String>();
-		ArrayList<String> keySet = new ArrayList<String>(tsmList.getJSONObject(type).getJSONObject(series).keySet());
-		for (int i = 0; i < tsmList.getJSONObject(type).getJSONObject(series).keySet().size(); i++) {
-			if (keySet.get(i).contains(filter)) {
-				nameList.add(keySet.get(i));
-			}
-			if (nameList.size() == 25){
-				return nameList;
+		if (tsmList.keySet().contains(type) && tsmList.getJSONObject(type).keySet().contains(series)) {
+			ArrayList<String> keySet = new ArrayList<String>(
+					tsmList.getJSONObject(type).getJSONObject(series).keySet());
+			for (int i = 0; i < tsmList.getJSONObject(type).getJSONObject(series).keySet().size(); i++) {
+				if (keySet.get(i).toLowerCase().contains(filter.toLowerCase())) {
+					nameList.add(keySet.get(i));
+				}
+				if (nameList.size() == 25) {
+					return nameList;
+				}
 			}
 		}
 		return nameList;
