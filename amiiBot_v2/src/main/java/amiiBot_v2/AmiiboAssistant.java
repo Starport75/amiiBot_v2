@@ -14,7 +14,7 @@ public class AmiiboAssistant {
 		String curType;
 		String curSeries;
 		String curName;
-
+		
 		fullJSON = nFullJSON;
 		amiiboList = fullJSON.getJSONArray("amiibo");
 		for (int i = 0; i < amiiboList.length(); i++) {
@@ -27,22 +27,13 @@ public class AmiiboAssistant {
 			if (tsmList.getJSONObject(curType).keySet().contains(curSeries) == false) {
 				tsmList.getJSONObject(curType).put(curSeries, new JSONObject());
 			}
-			tsmList.getJSONObject(curType).getJSONObject(curSeries).put(curName, amiiboList.getJSONObject(i));
+			tsmList.getJSONObject(curType).getJSONObject(curSeries).put(curName, amiiboList.getJSONObject(i).get("amiibo_id"));
 		}
 	}
 
 	public int findAmiiboID(String type, String series, String name) {
-		for (int i = 0; i < amiiboList.length(); i++) {
-			System.out.println(amiiboList.getJSONObject(i).getJSONObject("type").getString("type")
-					+ amiiboList.getJSONObject(i).getJSONObject("amiibo_series").getString("name") == series
-							+ amiiboList.getJSONObject(i).getString("name"));
-			if (amiiboList.getJSONObject(i).getJSONObject("type").getString("type") == type
-					&& amiiboList.getJSONObject(i).getJSONObject("amiibo_series").getString("name") == series
-					&& amiiboList.getJSONObject(i).getString("name") == name) {
-				return i;
-			}
-		}
-		return 0;
+		System.out.println("amiibo ID: " + tsmList.getJSONObject(type).getJSONObject(series).getInt(name));
+		return tsmList.getJSONObject(type).getJSONObject(series).getInt(name);
 	}
 
 	public ArrayList<String> getTypeList() {
@@ -50,6 +41,7 @@ public class AmiiboAssistant {
 	}
 
 	public ArrayList<String> getSeriesList(String type) {
+		System.out.println(tsmList.getJSONObject(type).keySet());
 		return new ArrayList<String>(tsmList.getJSONObject(type).keySet());
 	}
 

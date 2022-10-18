@@ -45,7 +45,7 @@ public class AmiiboHuntAccess {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("amiibo: " + amiibo);
+		//System.out.println("amiibo: " + amiibo);
 		return amiibo;
 	}
 	
