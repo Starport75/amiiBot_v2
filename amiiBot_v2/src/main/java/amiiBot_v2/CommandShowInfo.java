@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -28,17 +29,15 @@ public class CommandShowInfo {
 	String commandDescription = "Returns information on the given amiibo!";
 
 	public CommandShowInfo(DiscordApi api, AmiiboHuntAccess amiiboData, AmiiboAssistant AAssist) {
-		List<SlashCommand> globalCommands = api.getGlobalSlashCommands().join();
+		Set<SlashCommand> globalCommands = api.getGlobalSlashCommands().join();
 
 		int i = 0;
 		boolean isInitalized = false;
 
-		while (i < globalCommands.size() & !isInitalized) {
-			// List commands
-			// System.out.println(globalCommands.get(i).getName());
-			if (globalCommands.get(i).getName().equals(commandName)) {
+		for (SlashCommand currCommand : globalCommands) {
+			if (currCommand.getName().equals(commandName)) {
 				isInitalized = true;
-				thisCommand = globalCommands.get(i);
+				thisCommand = currCommand;
 			}
 			i++;
 		}
@@ -72,7 +71,7 @@ public class CommandShowInfo {
 				if (amiiboID == -1) {
 					EmbedBuilder embed = new EmbedBuilder()
 							.addField("Error:",
-									"Invalid amiibo! Please correct your type, series, and name, and try again.")
+									"Invalid amiibo! Please correct your type, series, and name and try again.")
 							.setColor(Color.red);
 					slashCommandInteraction.createImmediateResponder().addEmbed(embed).setFlags(MessageFlag.EPHEMERAL)
 							.respond();

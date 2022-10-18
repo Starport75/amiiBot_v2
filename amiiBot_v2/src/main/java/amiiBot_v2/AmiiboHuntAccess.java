@@ -45,8 +45,20 @@ public class AmiiboHuntAccess {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		//System.out.println("amiibo: " + amiibo);
 		return amiibo;
+	}
+	
+	public JSONObject getFigureImage(String ID) {
+		ArrayList<NameValuePair> parameters = new ArrayList<NameValuePair>();
+		parameters.add(new BasicNameValuePair("discord_id", ID));
+		JSONObject output = null;
+		try {
+			output = sendGET("https://www.amiibohunt.com/api/discord/v1/getCollectionImageById", parameters);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return output;
 	}
 	
 	private JSONObject sendGET(String url, List<NameValuePair> params) throws IOException {

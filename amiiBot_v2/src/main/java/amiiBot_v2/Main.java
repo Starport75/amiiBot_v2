@@ -20,5 +20,6 @@ public class Main {
 		
 		new CommandPing(api, access);
 		new CommandShowInfo(api, access, assistant);
+		new CommandGenerateImage(api, access);
 		}
 }
