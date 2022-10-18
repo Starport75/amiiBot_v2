@@ -14,7 +14,7 @@ public class AmiiboAssistant {
 		String curType;
 		String curSeries;
 		String curName;
-		
+
 		fullJSON = nFullJSON;
 		amiiboList = fullJSON.getJSONArray("amiibo");
 		for (int i = 0; i < amiiboList.length(); i++) {
@@ -27,7 +27,8 @@ public class AmiiboAssistant {
 			if (tsmList.getJSONObject(curType).keySet().contains(curSeries) == false) {
 				tsmList.getJSONObject(curType).put(curSeries, new JSONObject());
 			}
-			tsmList.getJSONObject(curType).getJSONObject(curSeries).put(curName, amiiboList.getJSONObject(i).get("amiibo_id"));
+			tsmList.getJSONObject(curType).getJSONObject(curSeries).put(curName,
+					amiiboList.getJSONObject(i).get("amiibo_id"));
 		}
 	}
 
@@ -45,7 +46,17 @@ public class AmiiboAssistant {
 		return new ArrayList<String>(tsmList.getJSONObject(type).keySet());
 	}
 
-	public ArrayList<String> getNameList(String type, String series) {
-		return new ArrayList<String>(tsmList.getJSONObject(type).getJSONObject(series).keySet());
+	public ArrayList<String> getNameList(String type, String series, String filter) {
+		ArrayList<String> nameList = new ArrayList<String>();
+		ArrayList<String> keySet = new ArrayList<String>(tsmList.getJSONObject(type).getJSONObject(series).keySet());
+		for (int i = 0; i < tsmList.getJSONObject(type).getJSONObject(series).keySet().size(); i++) {
+			if (keySet.get(i).contains(filter)) {
+				nameList.add(keySet.get(i));
+			}
+			if (nameList.size() == 25){
+				return nameList;
+			}
+		}
+		return nameList;
 	}
 }
