@@ -6,20 +6,32 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 
 public class Main {
-	
+
 	static boolean debugMode = true;
-	
-	public static void main(String[] args) throws IOException {		
-		FileAccess file = new FileAccess(debugMode);
+
+	public static void main(String[] args) throws IOException {
+
+		final FileAccess file = new FileAccess(debugMode);
+		final String token = file.getDiscordToken();
+		final DiscordApi api = new DiscordApiBuilder().setToken(token).login().join();
 		AmiiboHuntAccess access = new AmiiboHuntAccess(file.getAmiiboHuntToken());
-		AmiiboAssistant assistant = new AmiiboAssistant(access.getBaseList());
-		String token = file.getDiscordToken();
+
+		System.out.print("Loading commands");
 		
-		DiscordApi api = new DiscordApiBuilder().setToken(token).login().join();
-		System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
-		
-		new CommandPing(api, access);
-		new CommandShowInfo(api, access, assistant);
+		new CommandPing(api);
+		System.out.print(".");
+		new CommandShowInfo(api, access);
+		System.out.print(".");
 		new CommandGenerateImage(api, access);
-		}
+		System.out.print(".");
+		new CommandUpdateData(api, access);
+		System.out.print(".");
+		new CommandCredits(api);
+		System.out.print(".");
+		new CommandUpdateUsername(api, access);
+		System.out.println(" Done!");
+
+		System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
+
+	}
 }

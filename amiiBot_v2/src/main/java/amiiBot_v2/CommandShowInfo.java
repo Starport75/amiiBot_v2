@@ -16,7 +16,6 @@ import org.javacord.api.interaction.SlashCommand;
 import org.javacord.api.interaction.SlashCommandInteraction;
 import org.javacord.api.interaction.SlashCommandOption;
 import org.javacord.api.interaction.SlashCommandOptionChoice;
-import org.javacord.api.interaction.SlashCommandOptionType;
 import org.javacord.api.interaction.SlashCommandUpdater;
 import org.javacord.api.util.logging.ExceptionLogger;
 import org.json.JSONObject;
@@ -28,10 +27,9 @@ public class CommandShowInfo {
 	String commandName = "show_info";
 	String commandDescription = "Returns information on the given amiibo!";
 
-	public CommandShowInfo(DiscordApi api, AmiiboHuntAccess amiiboData, AmiiboAssistant AAssist) {
+	public CommandShowInfo(DiscordApi api, AmiiboHuntAccess amiiboData) {
 		Set<SlashCommand> globalCommands = api.getGlobalSlashCommands().join();
 
-		int i = 0;
 		boolean isInitalized = false;
 
 		for (SlashCommand currCommand : globalCommands) {
@@ -39,7 +37,6 @@ public class CommandShowInfo {
 				isInitalized = true;
 				thisCommand = currCommand;
 			}
-			i++;
 		}
 
 		if (!isInitalized) {
@@ -64,7 +61,7 @@ public class CommandShowInfo {
 
 				// Spot for command response
 
-				int amiiboID = AAssist.findAmiiboID(
+				int amiiboID = amiiboData.assist().findAmiiboID(
 						slashCommandInteraction.getArguments().get(0).getStringValue().get(),
 						slashCommandInteraction.getArguments().get(1).getStringValue().get(),
 						slashCommandInteraction.getArguments().get(2).getStringValue().get());
@@ -77,17 +74,19 @@ public class CommandShowInfo {
 							.respond();
 				} else {
 					JSONObject amiibo = amiiboData.getAmiibo(amiiboID).getJSONObject("amiibo");
-
+					//System.out.println(amiibo.toString());
 					EmbedBuilder embed = new EmbedBuilder().setTitle(amiibo.getString("name"))
 							.setImage(amiibo.getString("image_imgix_full_card"))
-							.addField("Release Dates:", "🇯🇵: " + amiibo.getString("release_jp") + "\n🇺🇸: "
-									+ amiibo.getString("release_na") + "\n🇪🇺: " + amiibo.getString("release_eu")
-									+ "\n🇦🇺: " + amiibo.getString("release_au"))
-							.addField("**Retailers with Stock**", "stock data here")
+							.addField("Release Dates:",
+									"🇯🇵: " + formatDates(amiibo.get("release_jp")) + "\n🇺🇸: "
+											+ formatDates(amiibo.get("release_na")) + "\n🇪🇺: "
+											+ formatDates(amiibo.get("release_eu")) + "\n🇦🇺: "
+											+ formatDates(amiibo.get("release_au")))
+							//.addField("**Retailers with Stock**", "stock data here")
 							.setColor(
-									new Color(Integer.parseInt(amiibo.getString("background_color").substring(1), 16)))
+									new Color(Integer.parseInt(formatColor(amiibo.get("background_color")).substring(1), 16)))
 							.addField("\u200b",
-									"**Average Current Listed Prices** \n *prices are an estimate based on collected data*")
+									"**Average Current Listed Prices** \n *prices are purely an estimate based on collected data*")
 							.addInlineField("Average Price NiB",
 									formatPrices(amiibo.getDouble("average_listed_this_month_us_new"), 0) + "\n"
 											+ formatPrices(amiibo.getDouble("average_listed_this_month_uk_new"), 1))
@@ -108,7 +107,7 @@ public class CommandShowInfo {
 			case "type":
 				// System.out.println("Typing in 'Type'");
 				event.getAutocompleteInteraction()
-						.respondWithChoices(arrayToSlashCommandOptionChoiceList(AAssist.getTypeList(
+						.respondWithChoices(arrayToSlashCommandOptionChoiceList(amiiboData.assist().getTypeList(
 								event.getAutocompleteInteraction().getArguments().get(0).getStringValue().get())))
 						.exceptionally(ExceptionLogger.get());
 				break;
@@ -116,7 +115,7 @@ public class CommandShowInfo {
 			case "series":
 				// System.out.println("Typing in 'Series'");
 				event.getAutocompleteInteraction()
-						.respondWithChoices(arrayToSlashCommandOptionChoiceList(AAssist.getSeriesList(
+						.respondWithChoices(arrayToSlashCommandOptionChoiceList(amiiboData.assist().getSeriesList(
 								event.getAutocompleteInteraction().getArguments().get(0).getStringValue().get(),
 								event.getAutocompleteInteraction().getArguments().get(1).getStringValue().get())))
 						.exceptionally(ExceptionLogger.get());
@@ -125,7 +124,7 @@ public class CommandShowInfo {
 			case "name":
 				// System.out.println("Typing in 'Name'");
 				event.getAutocompleteInteraction()
-						.respondWithChoices(arrayToSlashCommandOptionChoiceList(AAssist.getNameList(
+						.respondWithChoices(arrayToSlashCommandOptionChoiceList(amiiboData.assist().getNameList(
 								event.getAutocompleteInteraction().getArguments().get(0).getStringValue().get(),
 								event.getAutocompleteInteraction().getArguments().get(1).getStringValue().get(),
 								event.getAutocompleteInteraction().getArguments().get(2).getStringValue().get())))
@@ -142,6 +141,20 @@ public class CommandShowInfo {
 			return "*Lack of Data*";
 		}
 		return currency[country] + twoPlaces.format(price);
+	}
+
+	private String formatDates(Object input) {
+		if (input.toString() == "null") {
+			return "N/A";
+		}
+		return input + "";
+	}
+	
+	private String formatColor(Object input) {
+		if (input.toString() == "null") {
+			return "#FFFFFF";
+		}
+		return input + "";
 	}
 
 	private List<SlashCommandOptionChoice> arrayToSlashCommandOptionChoiceList(ArrayList<String> list) {

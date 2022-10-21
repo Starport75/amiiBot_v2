@@ -11,6 +11,7 @@ public class AmiiboAssistant {
 	JSONObject tsnList = new JSONObject();
 
 	public AmiiboAssistant(JSONObject nFullJSON) {
+
 		String curType;
 		String curSeries;
 		String curName;
@@ -35,7 +36,8 @@ public class AmiiboAssistant {
 	public int findAmiiboID(String type, String series, String name) {
 		if (tsnList.keySet().contains(type) && tsnList.getJSONObject(type).keySet().contains(series)
 				&& tsnList.getJSONObject(type).getJSONObject(series).keySet().contains(name)) {
-			//System.out.println("amiibo ID: " + tsnList.getJSONObject(type).getJSONObject(series).getInt(name));
+			// System.out.println("amiibo ID: " +
+			// tsnList.getJSONObject(type).getJSONObject(series).getInt(name));
 			return tsnList.getJSONObject(type).getJSONObject(series).getInt(name);
 		} else {
 			return -1;
