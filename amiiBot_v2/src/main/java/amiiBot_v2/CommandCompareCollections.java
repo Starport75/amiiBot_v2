@@ -5,16 +5,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Set;
 
-import org.javacord.api.AccountUpdater;
 import org.javacord.api.DiscordApi;
-import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageFlag;
-import org.javacord.api.entity.message.component.ActionRow;
-import org.javacord.api.entity.message.component.Button;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
-import org.javacord.api.entity.permission.PermissionType;
-import org.javacord.api.entity.server.ServerUpdater;
-import org.javacord.api.interaction.MessageComponentInteraction;
 import org.javacord.api.interaction.SlashCommand;
 import org.javacord.api.interaction.SlashCommandInteraction;
 import org.javacord.api.interaction.SlashCommandOption;
@@ -25,15 +18,14 @@ import org.javacord.api.util.logging.ExceptionLogger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class CommandUpdateUsername {
+public class CommandCompareCollections {
 	SlashCommand thisCommand;
-	String output = "If you see this, that's bad";
-
+	
 	// Spot to set the name and description of the command
-	String commandName = "generate_tag";
+	String commandName = "compare_collections";
 	String commandDescription = "Generates a username tag that shows how many amiibo you have in your collection!";
 
-	public CommandUpdateUsername(DiscordApi api, AmiiboHuntAccess access) {
+	public CommandCompareCollections(DiscordApi api, AmiiboHuntAccess access) {
 		Set<SlashCommand> globalCommands = api.getGlobalSlashCommands().join();
 
 		boolean isInitalized = false;

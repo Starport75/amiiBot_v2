@@ -32,7 +32,7 @@ public class Main {
 		new CommandUpdateUsername(api, access);
 		System.out.println(" Done!");
 
-		System.out.println("You can invite the bot by using the following url: " + api.createBotInvite(Permissions.fromBitmask(201419840)));
+		System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
 
 	}
 }
