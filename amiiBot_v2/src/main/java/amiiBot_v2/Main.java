@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
+import org.javacord.api.entity.permission.Permissions;
 
 public class Main {
 
@@ -31,7 +32,7 @@ public class Main {
 		new CommandUpdateUsername(api, access);
 		System.out.println(" Done!");
 
-		System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
+		System.out.println("You can invite the bot by using the following url: " + api.createBotInvite(Permissions.fromBitmask(201419840)));
 
 	}
 }
