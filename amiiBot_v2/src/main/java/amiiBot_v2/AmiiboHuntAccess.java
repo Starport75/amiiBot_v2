@@ -14,6 +14,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import org.javacord.api.interaction.callback.InteractionOriginalResponseUpdater;
 import org.json.JSONObject;
 
 public class AmiiboHuntAccess {
@@ -31,11 +32,11 @@ public class AmiiboHuntAccess {
 		// System.out.println(baseList.toString());
 
 	}
-	
+
 	public AmiiboAssistant assist(JSONObject obj) {
 		return new AmiiboAssistant(obj);
 	}
-	
+
 	public AmiiboAssistant assist() {
 		return new AmiiboAssistant(baseList);
 	}
@@ -43,13 +44,13 @@ public class AmiiboHuntAccess {
 	public JSONObject getBaseList() {
 		return baseList;
 	}
-	
+
 	public JSONObject updateBaseList() throws IOException {
 		ArrayList<NameValuePair> parameters = new ArrayList<NameValuePair>();
 		parameters.add(new BasicNameValuePair("discord_id", "205877471067766784"));
-		return baseList = sendGET("https://www.amiibohunt.com/api/discord/v1/getCollectionById", parameters); 
+		return baseList = sendGET("https://www.amiibohunt.com/api/discord/v1/getCollectionById", parameters);
 	}
-	
+
 	public JSONObject getUserList(String discordID) throws IOException {
 		ArrayList<NameValuePair> parameters = new ArrayList<NameValuePair>();
 		parameters.add(new BasicNameValuePair("discord_id", discordID));
@@ -98,6 +99,33 @@ public class AmiiboHuntAccess {
 			e.printStackTrace();
 		}
 		return output;
+	}
+
+	public JSONObject addAmiibo(String ID, String amiiboID, boolean isBoxed){
+		ArrayList<NameValuePair> parameters = new ArrayList<NameValuePair>();
+		parameters.add(new BasicNameValuePair("discord_id", ID));
+		parameters.add(new BasicNameValuePair("is_boxed", isBoxed + ""));
+		parameters.add(new BasicNameValuePair("amiibo_id", amiiboID));
+		try {
+			return sendGET("https://www.amiibohunt.com/api/discord/v1/addAmiiboToCollection", parameters);
+		} catch (IOException e) {
+			System.out.println("Failed to access AmiiboHunt");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public JSONObject removeAmiibo(String ID, String amiiboID){
+		ArrayList<NameValuePair> parameters = new ArrayList<NameValuePair>();
+		parameters.add(new BasicNameValuePair("discord_id", ID));
+		parameters.add(new BasicNameValuePair("amiibo_id", amiiboID));
+		try {
+			return sendGET("https://www.amiibohunt.com/api/discord/v1/removeAmiiboFromCollection", parameters);
+		} catch (IOException e) {
+			System.out.println("Failed to access AmiiboHunt");
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	private JSONObject sendGET(String url, List<NameValuePair> params) throws IOException {

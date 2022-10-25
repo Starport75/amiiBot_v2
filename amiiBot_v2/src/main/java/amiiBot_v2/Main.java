@@ -30,6 +30,8 @@ public class Main {
 		new CommandCredits(api);
 		System.out.print(".");
 		new CommandUpdateUsername(api, access);
+		System.out.print(".");
+		new CommandCompareCollections(api, access);
 		System.out.println(" Done!");
 
 		System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());

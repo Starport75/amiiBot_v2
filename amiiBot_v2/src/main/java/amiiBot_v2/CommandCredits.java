@@ -57,7 +57,7 @@ public class CommandCredits {
 						.addField("\u200b", "and a huge shoutout to " + getName(api, "83396497059614720") + " for allowing amiiBot to exist!")
 						;
 				
-				slashCommandInteraction.createImmediateResponder().addEmbed(embed).setFlags(MessageFlag.EPHEMERAL).respond();
+				slashCommandInteraction.createImmediateResponder().addEmbed(embed).respond();
 			}
 		});
 
