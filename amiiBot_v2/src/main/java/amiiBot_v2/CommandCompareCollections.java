@@ -75,7 +75,7 @@ public class CommandCompareCollections {
 					JSONObject user2AmiiboJSON = null;
 					String fullSeriesName = "";
 					EmbedBuilder embed = new EmbedBuilder();
-
+					
 					try {
 						user1AmiiboJSON = access.getUserList(event.getInteraction().getUser().getIdAsString());
 						user2AmiiboJSON = access.getUserList(
@@ -83,11 +83,11 @@ public class CommandCompareCollections {
 					} catch (IOException e) {
 						System.out.println("Error accessing AmiiboHunt");
 					}
-
+					
 					String p1Name = event.getInteraction().getUser().getName();
 					String p2Name = slashCommandInteraction.getArguments().get(0).getUserValue().get().getName();
 					consentID = slashCommandInteraction.getArguments().get(0).getUserValue().get().getId();
-
+					
 					if (!user1AmiiboJSON.get("error").equals("none")) {
 						embed.setColor(Color.red);
 						switch (user1AmiiboJSON.get("error").toString()) {
@@ -234,7 +234,6 @@ public class CommandCompareCollections {
 		api.addMessageComponentCreateListener(event -> {
 			MessageComponentInteraction messageComponentInteraction = event.getMessageComponentInteraction();
 			String customId = messageComponentInteraction.getCustomId();
-
 			switch (customId) {
 			case "consent":
 
